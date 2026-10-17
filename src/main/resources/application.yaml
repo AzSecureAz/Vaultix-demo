@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:8083}
+  servlet:
+    context-path: /api/v1/demo
+  compression:
+    enabled: true
+    mime-types:
+      - application/json
+      - text/plain
+      - application/xml
+    min-response-size: 1024
+
+spring:
+  application:
+    name: demo
+  threads:
+    virtual:
+      enabled: true
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      username: ${SPRING_DATA_REDIS_USERNAME:demo_user}
+      password: ${SPRING_DATA_REDIS_PASSWORD:demo_password}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI:http://localhost:8082/api/v1/auth/.well-known/jwks.json}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
+
+vaultix:
+  jwt:
+    issuer: ${VAULTIX_JWT_ISSUER:https://auth.vaultix.com}
