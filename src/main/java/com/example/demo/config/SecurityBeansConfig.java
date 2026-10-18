@@ -60,7 +60,10 @@ public class SecurityBeansConfig {
     public CustomJwtAuthenticationConverter customJwtAuthenticationConverter(
             RoleRevocationService roleRevocationService,
             PermissionRevocationService permissionRevocationService) {
-        return new CustomJwtAuthenticationConverter(roleRevocationService, permissionRevocationService);
+        return CustomJwtAuthenticationConverter.builder()
+                .roleRevocationService(roleRevocationService)
+                .permissionRevocationService(permissionRevocationService)
+                .build();
     }
 
     @Bean
