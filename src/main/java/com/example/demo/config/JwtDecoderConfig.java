@@ -18,11 +18,11 @@ public class JwtDecoderConfig {
             Cache jwkSetCache,
             JwtBlacklistValidator jwtBlacklistValidator) {
 
-        return CommonJwtDecoderFactory.create(
-                jwtProperties.jwkSetUri(),
-                jwkSetCache,
-                jwtProperties.issuer(),
-                jwtBlacklistValidator
-        );
+        return CommonJwtDecoderFactory.withJwkSetUri()
+                .jwkSetUri(jwtProperties.jwkSetUri())
+                .cache(jwkSetCache)
+                .expectedIssuer(jwtProperties.issuer())
+                .blacklistValidator(jwtBlacklistValidator)
+                .build();
     }
 }
