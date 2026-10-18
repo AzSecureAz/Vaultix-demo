@@ -26,13 +26,26 @@ public class RedisPubSubConfig {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
 
-        RedisPubSubHelper.subscribe(container, SecurityTopics.SIGNING_KEY_REVOCATION, payload -> {
-            log.info("Received key revocation event on Redis: {}. Evicting local JWKS cache.", payload);
-            jwkSetCache.clear();
-        });
+        RedisPubSubHelper.builder()
+                .container(container)
+                .topicName(SecurityTopics.SIGNING_KEY_REVOCATION)
+                .onMessage(payload -> {
+                    log.info("Received key revocation event on Redis: {}. Evicting local JWKS cache.", payload);
+                    jwkSetCache.clear();
+                })
+                .build();
 
-        RedisPubSubHelper.subscribe(container, SecurityTopics.PERMISSION_REVOCATION, permissionRevocationService::handleRevocationEvent);
-        RedisPubSubHelper.subscribe(container, SecurityTopics.ROLE_REVOCATION, roleRevocationService::handleRevocationEvent);
+        RedisPubSubHelper.builder()
+                .container(container)
+                .topicName(SecurityTopics.PERMISSION_REVOCATION)
+                .onMessage(permissionRevocationService::handleRevocationEvent)
+                .build();
+
+        RedisPubSubHelper.builder()
+                .container(container)
+                .topicName(SecurityTopics.ROLE_REVOCATION)
+                .onMessage(roleRevocationService::handleRevocationEvent)
+                .build();
 
         return container;
     }
