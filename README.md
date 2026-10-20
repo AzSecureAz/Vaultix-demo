@@ -91,6 +91,9 @@ Client (Browser / Mobile / Gateway)
 ### 5. Unified Error Handling
 - Standardizes all unauthorized and forbidden responses using `CustomAuthenticationEntryPoint` (401) and `CustomAccessDeniedHandler` (403), masked to prevent internal leakage and returned in `ApiResponse.error(...)` envelopes.
 
+### 6. Platform-Wide Snake Case JSON (`SNAKE_CASE`)
+- Enforces `spring.jackson.property-naming-strategy: SNAKE_CASE` across all endpoints, ensuring serialized request/response attributes match Vaultix platform conventions.
+
 ---
 
 ## Configuration Reference
