@@ -16,8 +16,11 @@ import com.vaultix.common.security.JwtBlacklistValidator;
 import com.vaultix.common.security.PermissionRevocationService;
 import com.vaultix.common.security.RedisPermissionRevocationService;
 import com.vaultix.common.security.RedisRoleRevocationService;
+import com.vaultix.common.security.RedisSudoService;
 import com.vaultix.common.security.RedisTokenBlacklistService;
+import com.vaultix.common.security.RequireSudoAspect;
 import com.vaultix.common.security.RoleRevocationService;
+import com.vaultix.common.security.SudoService;
 import com.vaultix.common.security.TokenBlacklistService;
 
 import tools.jackson.databind.ObjectMapper;
@@ -61,6 +64,20 @@ public class SecurityBeansConfig {
     public JwtBlacklistValidator jwtBlacklistValidator(TokenBlacklistService tokenBlacklistService) {
         return JwtBlacklistValidator.builder()
                 .tokenBlacklistService(tokenBlacklistService)
+                .build();
+    }
+
+    @Bean
+    public SudoService sudoService(StringRedisTemplate stringRedisTemplate) {
+        return RedisSudoService.builder()
+                .stringRedisTemplate(stringRedisTemplate)
+                .build();
+    }
+
+    @Bean
+    public RequireSudoAspect requireSudoAspect(SudoService sudoService) {
+        return RequireSudoAspect.builder()
+                .sudoService(sudoService)
                 .build();
     }
 

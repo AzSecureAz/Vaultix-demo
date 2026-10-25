@@ -80,13 +80,18 @@ Client (Browser / Mobile / Gateway)
 ### 6. Platform-Wide Snake Case JSON (`SNAKE_CASE`)
 - Enforces `spring.jackson.property-naming-strategy: SNAKE_CASE` across all endpoints, ensuring serialized request/response attributes match Vaultix platform conventions.
 
+### 7. Elevated Sudo Mode Verification (`RequireSudoAspect` & `SudoService`)
+- Configures `SudoService` (`RedisSudoService`) and `RequireSudoAspect` beans in `SecurityBeansConfig`.
+- Enables downstream resource server controllers to enforce step-up authentication using `@RequireSudo` on high-risk operations.
+- Validates active session elevation via Redis read access against `auth:sudo:session:<sessionId>`.
+
 ---
 
 ## Redis ACL Permissions
 
 The demo service connects to Redis as **`demo_user`** with restricted least-privilege permissions:
 - Read/Write on own namespace: `~demo:*`
-- Read-only on auth revocation stores: `%R~auth:blacklist:*`, `%R~auth:permission:disabled`, `%R~auth:role:disabled`
+- Read-only on auth revocation & sudo stores: `%R~auth:blacklist:*`, `%R~auth:sudo:session:*`, `%R~auth:permission:disabled`, `%R~auth:role:disabled`
 - Pub/Sub subscription access: `&auth:signing-key:revocation`, `&auth:permission:revocation`, `&auth:role:revocation`, `&demo:*`
 
 Provisioning script: [`infra/redis/init-demo-acl.txt`](file:///c:/Users/vimal/Documents/Projects/Vaultix/infra/redis/init-demo-acl.txt).

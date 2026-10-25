@@ -24,7 +24,7 @@ Detailed security architecture, revocation handling, and Redis ACL models are ma
 
 | Document | Description |
 | :--- | :--- |
-| 📖 [**Security Architecture & Integration**](docs/ARCHITECTURE.md) | In-depth breakdown of the OAuth2 Resource Server integration, remote Nimbus JWKS decoding with Caffeine caching, real-time token blacklisting, dynamic permission & role revocation listeners over Redis Pub/Sub, and least-privilege Redis ACL permissions. |
+| 📖 [**Security Architecture & Integration**](docs/ARCHITECTURE.md) | In-depth breakdown of the OAuth2 Resource Server integration, remote Nimbus JWKS decoding with Caffeine caching, real-time token blacklisting, elevated sudo session verification, dynamic permission & role revocation listeners over Redis Pub/Sub, and least-privilege Redis ACL permissions. |
 
 ---
 
